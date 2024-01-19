@@ -1,14 +1,52 @@
-import { client } from 'lib/api'
-export default function Schedule() {
-    return <h1>記事のタイトル</h1>
+import{ getPostBySlug} from 'lib/api'
+import Container from 'components/container' 
+import PostHeader from 'components/post-header'
+import Image from 'next/image'
+
+export default function Schedule( {
+    title,
+    publish,
+    content,
+    eyecatch,
+    categories,
+}){
+    return(
+        <Container>
+            <article>
+                <PostHeader  title={title} subtitle="Blog Article" publish={publish} />
+                <figure>
+                <Image
+                    src={eyecatch.url}
+                    alt=""
+                    layout='responsive'
+                    width={eyecatch.width}
+                    height={eyecatch.height}
+                    sizes="(min-width: 1152px)1152px,100vw"
+                    priority
+                    />
+                    </figure>
+
+            </article>
+        </Container>
+    )
 }
 
 export async function getStaticProps() {
-    console.log('処理1')
-    setTimeout(() => console.log('処理2'), 1000)
-    console.log('処理3')
+    const slug = 'schedule'
+
+    const post = await getPostBySlug(slug)
 
     return {
-        props:{},
+        props:{
+            title: post.title,
+            publish: post.publishData,
+            content: post.content,
+            eyecatch: post.eyecatch,
+            categories: post.categories,
+        },
     }
 }
+
+
+
+    
